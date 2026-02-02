@@ -1,37 +1,51 @@
 let tasks = [];
 let editIndex = -1;
 
-function addTask(){
+function addTask() {
     let tasktext = document.getElementById("taskinput").value.trim();
     let taskdate = document.getElementById("dateinput").value;
     let tasktime = document.getElementById("timeinput").value;
     let taskstatus = document.getElementById("statusinput").value;
 
-    if(tasktext === "" || taskdate === "" || tasktime === "" || taskstatus === ""){
+    if (tasktext === "" || taskdate === "" || tasktime === "" || taskstatus === "") {
         alert("Please enter all fields including status");
         return;
     }
 
-    let exists = tasks.some((task, index) => 
+    let today = new Date();
+    let selectedDate = new Date(taskdate);
+
+    let currentMonth = today.getMonth();
+    let currentYear = today.getFullYear();
+
+    let selectedMonth = selectedDate.getMonth();
+    let selectedYear = selectedDate.getFullYear();
+
+    if (selectedMonth !== currentMonth || selectedYear !== currentYear) {
+        alert("You can only select dates from the current month.");
+        return;
+    }
+
+    let exists = tasks.some((task, index) =>
         task.text.toLowerCase() === tasktext.toLowerCase() && index !== editIndex
     );
 
-    if(exists){
+    if (exists) {
         alert("This task already exists!");
         return;
     }
 
-    let taskobj = { 
-        text: tasktext, 
-        date: taskdate, 
+    let taskobj = {
+        text: tasktext,
+        date: taskdate,
         time: tasktime,
         status: taskstatus
     };
 
-    if(editIndex === -1){
-        tasks.push(taskobj); 
+    if (editIndex === -1) {
+        tasks.push(taskobj);
     } else {
-        tasks[editIndex] = taskobj; 
+        tasks[editIndex] = taskobj;
         editIndex = -1;
     }
 
@@ -39,24 +53,24 @@ function addTask(){
     sortTask();
     displayTask();
 }
-function displayTask(taskArray = tasks){
+function displayTask(taskArray = tasks) {
     let list = document.getElementById("tasklist");
     list.innerHTML = "";
 
-    taskArray.forEach((task,index) =>{
+    taskArray.forEach((task, index) => {
 
-        let statusBadge = 
-            task.status === "Pending" 
+        let statusBadge =
+            task.status === "Pending"
                 ? `<span class="badge bg-secondary px-3 py-2"> Pending</span>`
-            : task.status === "Ongoing"
-                ? `<span class="badge bg-warning text-dark px-3 py-2">Ongoing</span>`
-                : `<span class="badge bg-success px-3 py-2">Complete</span>`;
+                : task.status === "Ongoing"
+                    ? `<span class="badge bg-warning text-dark px-3 py-2">Ongoing</span>`
+                    : `<span class="badge bg-success px-3 py-2">Complete</span>`;
 
         list.innerHTML += `
         <tr>
             <td>${task.text}</td>
             <td>${task.date}</td>
-            <td>${task.time}</td>
+             <td>${new Date('1970-01-01T' + task.time).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })}</td>
             <td>${statusBadge}</td>
             <td>
                 <button class="btn btn-sm btn-warning me-1" onclick="editTask(${index})">Edit</button>
@@ -66,12 +80,12 @@ function displayTask(taskArray = tasks){
     });
 }
 
-function deleteTask(index){
-    tasks.splice(index,1);
+function deleteTask(index) {
+    tasks.splice(index, 1);
     displayTask();
 }
 
-function editTask(index){
+function editTask(index) {
     let task = tasks[index];
     document.getElementById("taskinput").value = task.text;
     document.getElementById("dateinput").value = task.date;
@@ -80,22 +94,22 @@ function editTask(index){
     editIndex = index;
 }
 
-function clearInput(){
-    document.getElementById("taskinput").value= "";
-    document.getElementById("dateinput").value= "";
-    document.getElementById("timeinput").value= "";
-    document.getElementById("statusinput").value= ""; 
+function clearInput() {
+    document.getElementById("taskinput").value = "";
+    document.getElementById("dateinput").value = "";
+    document.getElementById("timeinput").value = "";
+    document.getElementById("statusinput").value = "";
 }
 
-function sortTask(){
-    tasks.sort((a,b) => {
+function sortTask() {
+    tasks.sort((a, b) => {
         let adatetime = new Date(a.date + " " + a.time);
         let bdatetime = new Date(b.date + " " + b.time);
         return adatetime - bdatetime;
     });
 }
 
-function searchTask(){
+function searchTask() {
     let searchvalue = document.getElementById("searchinput").value.toLowerCase();
 
     let filtered = tasks.filter(task =>
@@ -104,5 +118,6 @@ function searchTask(){
 
     displayTask(filtered);
 }
+
 
 displayTask();
