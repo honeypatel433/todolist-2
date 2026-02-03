@@ -10,10 +10,10 @@
 
 <body class="bg-light">
 
-    <div class="container bg-primary mt-5">
-        <div class="card shadow">
+    <div class="container mt-5">
+        <div class="card shadow bg-secondary">
             <div class="card-body">
-                <h3 class="text-center mb-4">Todo List</h3>   
+                <h3 class="text-center mb-4 fw-bold text-white">Todo List</h3>
                 <div class="row g-2 mb-3">
                     <div class="col-md-3">
                         <input type="text" id="taskinput" class="form-control" placeholder="Enter task">
@@ -33,15 +33,16 @@
                         </select>
                     </div>
                     <div class="col-md-3 d-grid">
-                        <button onclick="addTask()" class="btn btn-primary">Add</button>
+                        <button onclick="addTask()" class="btn btn-info fw-bold">Add Task</button>
                     </div>
                 </div>
 
                 <input type="text" id="searchinput" class="form-control mb-3" placeholder="Search task"
                     oninput="searchTask()">
                 <div class="table-responsive">
-                    <table class="table table-bordered table-striped text-center align-middle">
-                        <thead class="table-dark">
+                    <table
+                        class="table table-bordered border-light-subtle table-striped text-center text-dark align-middle">
+                        <thead class="table-light">
                             <tr>
                                 <th>Task</th>
                                 <th>Date</th>
@@ -53,6 +54,7 @@
                         <tbody id="tasklist"></tbody>
                     </table>
                 </div>
+
             </div>
         </div>
     </div>
